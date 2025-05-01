@@ -39,7 +39,7 @@ P = '\033[38;5;135m'
 ORANGE = '\033[38;5;208m'
 AR = f'{ORANGE}▶{RST}'
 ERR = f'{P}[{RST}{R}ERROR{RST}{P}]{RST}'
-IMG = 'https://github.com/gutris1/segsmaker/raw/main/script/loading.png'
+IMG = 'https://github.com/Ntstrike/segsmaker/raw/main/script/loading.png'
 
 HOME = Path(ENVHOME)
 BASEPATH = Path(ENVBASE)
@@ -66,7 +66,7 @@ def prevent_silly():
     parser.add_argument('--webui', required=True, help='available webui: A1111, Forge, ComfyUI, ReForge, SwarmUI')
     parser.add_argument('--civitai_key', required=True, help='your CivitAI API key')
     parser.add_argument('--hf_read_token', default=None, help='your Huggingface READ Token (optional)')
-    parser.add_argument('--bgm', default='dQw4w9WgXcQ', help='play youtube video on jupyter cell')
+    parser.add_argument('--bgm', default='FpPBPQUdFx8', help='play youtube video on jupyter cell')
 
     args, unknown = parser.parse_known_args()
 
@@ -93,7 +93,7 @@ def prevent_silly():
     if not arg3: arg3 = ''
     if re.search(r'\s+', arg3): arg3 = ''
 
-    rr = 'dQw4w9WgXcQ'
+    rr = 'FpPBPQUdFx8'
     if not arg4: arg4 = rr
     if re.search(r'\s+', arg4): arg4 = rr
 
@@ -147,7 +147,7 @@ def install_tunnel():
     SyS(f'chmod +x {USR}/cl')
 
     path = PY / 'lib/python3.10/site-packages/gradio_tunneling/main.py'
-    SyS(f'pip install -q gradio-tunneling && wget -qO {path} https://github.com/gutris1/segsmaker/raw/main/script/gradio-tunnel.py')
+    SyS(f'pip install -q gradio-tunneling && wget -qO {path} https://github.com/Ntstrike/segsmaker/raw/main/script/gradio-tunnel.py')
 
     bins = {
         'zrok': {
@@ -290,7 +290,7 @@ def webui_req(U, W, M):
     CD(W)
 
     if U in ['A1111', 'Forge', 'ComfyUI', 'ReForge']:
-        pull(f'https://github.com/gutris1/segsmaker {U.lower()} {W}')
+        pull(f'https://github.com/Ntstrike/segsmaker {U.lower()} {W}')
 
     elif U == 'SwarmUI':
         M.mkdir(parents=True, exist_ok=True)
@@ -306,8 +306,8 @@ def webui_req(U, W, M):
     install_tunnel()
 
     scripts = [
-        f'https://github.com/gutris1/segsmaker/raw/main/script/controlnet.py {W}/asd',
-        f'https://github.com/gutris1/segsmaker/raw/main/script/KC/segsmaker.py {W}'
+        f'https://github.com/Ntstrike/segsmaker/raw/main/script/controlnet.py {W}/asd',
+        f'https://github.com/Ntstrike/segsmaker/raw/main/script/KC/segsmaker.py {W}'
     ]
 
     u = M / 'upscale_models' if U in ['ComfyUI', 'SwarmUI'] else M / 'ESRGAN'
@@ -350,7 +350,7 @@ def webui_extension(U, W, M):
         clone(str(W / 'asd/extension.txt'))
 
         clone(
-            'https://github.com/gutris1/sd-civitai-browser-plus-plus'
+            'https://github.com/Ntstrike/sd-civitai-browser-plus-plus'
             if ENVNAME == 'Kaggle'
             else 'https://github.com/BlafKing/sd-civitai-browser-plus'
         )
@@ -427,10 +427,10 @@ def webui_installer():
 
 def notebook_scripts():
     z = [
-        (STR / '00-startup.py', f'wget -qO {STR}/00-startup.py https://github.com/gutris1/segsmaker/raw/main/script/KC/00-startup.py'),
-        (nenen, f'wget -qO {nenen} https://github.com/gutris1/segsmaker/raw/main/script/nenen88.py'),
-        (STR / 'cupang.py', f'wget -qO {STR}/cupang.py https://github.com/gutris1/segsmaker/raw/main/script/cupang.py'),
-        (MRK, f'wget -qO {MRK} https://github.com/gutris1/segsmaker/raw/main/script/marking.py')
+        (STR / '00-startup.py', f'wget -qO {STR}/00-startup.py https://github.com/Ntstrike/segsmaker/raw/main/script/KC/00-startup.py'),
+        (nenen, f'wget -qO {nenen} https://github.com/Ntstrike/segsmaker/raw/main/script/nenen88.py'),
+        (STR / 'cupang.py', f'wget -qO {STR}/cupang.py https://github.com/Ntstrike/segsmaker/raw/main/script/cupang.py'),
+        (MRK, f'wget -qO {MRK} https://github.com/Ntstrike/segsmaker/raw/main/script/marking.py')
     ]
 
     [SyS(y) for x, y in z if not Path(x).exists()]
