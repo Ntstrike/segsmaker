@@ -30,10 +30,12 @@ for envname, (envbase, envhome, envvar) in env_list.items():
         ENVHOME = envhome
         break
 
-# Se não estiver em Colab ou Kaggle, simplesmente seguir sem erro
+# Se não estiver em Colab ou Kaggle, define valores padrão para SageMaker
 if not ENVNAME:
     print('You are not in Kaggle or Google Colab, but this will run anyway.')
-    # Não chamar sys.exit() aqui, apenas prosseguir
+    ENVNAME = 'SageMaker'
+    ENVBASE = '/home/studio-lab-user'
+    ENVHOME = '/home/studio-lab-user/sagemaker-studio-lab-notebooks'
 
 RST = '\033[0m'
 R = '\033[31m'
