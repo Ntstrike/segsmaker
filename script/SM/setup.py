@@ -18,7 +18,8 @@ import shlex
 import json
 import os
 import sys
-sys.path.append('/segsmaker/script/nenen88.py')  # ATT?
+import os
+sys.path.append(os.path.expanduser("~/.conda"))
 from nenen88 import pull, say, download, clone, tempe
 
 SyS = get_ipython().system
