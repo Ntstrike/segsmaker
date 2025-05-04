@@ -453,4 +453,4 @@ with output: PY.exists() or PythonPortable()
 notebook_scripts()
 
 from nenen88 import clone, say, download, tempe, pull
-webui_installer(
+webui_installer()
