@@ -17,7 +17,8 @@ import shutil
 import shlex
 import json
 import os
-
+import sys
+sys.path.append('/Segsmaker/script/nenen88')  # caminho correto onde o nenen88.py está
 from nenen88 import pull, say, download, clone, tempe
 
 SyS = get_ipython().system
