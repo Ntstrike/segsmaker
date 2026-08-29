@@ -54,6 +54,24 @@ def _marking():
 
     j.write_text(json.dumps(d, indent=4))
 
+def _link_tunnel_bin(binPath):
+    """Garante que o binario do tunel fica acessivel fora do processo Python
+    atual (ex: subprocessos disparados por outra celula/kernel, como o
+    cupang.py), criando um symlink dentro do bin do ambiente conda ativo."""
+    if not binPath.exists():
+        return
+
+    conda_bin = Path(sys.executable).parent
+    link = conda_bin / binPath.name
+
+    if link.exists() or link.is_symlink():
+        return
+
+    try:
+        link.symlink_to(binPath)
+    except OSError:
+        pass
+
 def _tunnels():
     tunnel = {
         'zrok2': {
@@ -71,7 +89,9 @@ def _tunnels():
         binPath = b['bin']
         p = binPath.parent
 
-        if b.get('version', binPath).exists(): continue
+        if b.get('version', binPath).exists():
+            _link_tunnel_bin(binPath)
+            continue
 
         p.mkdir(parents=True, exist_ok=True)
         if binPath.exists(): binPath.unlink()
@@ -90,6 +110,8 @@ def _tunnels():
 
         if str(p) not in iRON.get('PATH', ''): iRON['PATH'] += ':' + str(p)
         if binPath.exists(): binPath.chmod(0o755)
+
+        _link_tunnel_bin(binPath)
 
 def _symlinks(M):
     UID['ReForge-old']['sym'] = UID['ReForge']['sym']
