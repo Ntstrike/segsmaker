@@ -55,9 +55,6 @@ def _marking():
     j.write_text(json.dumps(d, indent=4))
 
 def _link_tunnel_bin(binPath):
-    """Garante que o binario do tunel fica acessivel fora do processo Python
-    atual (ex: subprocessos disparados por outra celula/kernel, como o
-    cupang.py), criando um symlink dentro do bin do ambiente conda ativo."""
     if not binPath.exists():
         return
 
