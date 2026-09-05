@@ -125,6 +125,9 @@ def _tunnels():
         SyS(f'tar -xzf {name} -C {USR}')
         SyS(f'rm -f {name}')
 
+
+        if b['bin'].exists(): b['bin'].chmod(0o755)
+
 def _symlinks(M):
     UID['ReForge-old']['sym'] = UID['ReForge']['sym']
     UID['ReForge-old']['links'] = UID['ReForge']['links']
@@ -214,6 +217,7 @@ def _setup():
     if WEBUI.exists() and (WEBUI / '.git').exists():
         CD(WEBUI)
         SyS(f"git pull origin {UID[ui]['branch']}")
+        _tunnels()
 
     else:
         say(f"<b>【{{red}} {ui.replace('-', ' ')}{{d}} 】{{red}}</b>")
