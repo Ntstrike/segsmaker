@@ -327,6 +327,17 @@ class CIVITAI:
 
         threading.Thread(target=t, daemon=True).start()
 
+def _already_downloaded(fp, fn, url):
+    if fp is None:
+        return False
+
+    name = fn or Path(urlparse(url).path).name
+    if not name:
+        return False
+
+    target = Path(fp).expanduser() / name
+    return target.is_file() and target.stat().st_size > 0
+
 @register_line_magic
 def download(i):
     i = i.split('#', 1)[0].strip()
@@ -388,6 +399,15 @@ def netorare(line):
         else:
             fn = (None if (civitai or driveGoogle) else Path(urlparse(url).path).name)
             fp = cwd
+
+        # pula o download inteiro se o arquivo de destino ja existir --
+        # evita re-baixar / sobrescrever extensoes, upscalers e modelos
+        # ja persistidos (ex: no Google Drive) de uma sessao anterior.
+        # Civitai fica de fora aqui porque o nome final so e conhecido
+        # depois do _res() resolver a API (checado de novo dentro de ariari())
+        if not (civitai or driveGoogle) and _already_downloaded(fp, fn, url):
+            print(f'  {GREEN}●{RESET} {fn or Path(urlparse(url).path).name} (ja existe, pulado)')
+            return
 
         if civitai or huggingface or github: ariari(url, fp, fn)
 
@@ -453,6 +473,14 @@ def ariari(url, fp, fn):
     if not url: return
 
     civitai, huggingface, *_ = _url(url)
+
+    # segunda checagem: pra civitai o nome final so e conhecido depois do
+    # _res() acima resolver a API, entao o check antecipado do netorare()
+    # nao pega esse caso -- confere de novo aqui, com o fn ja resolvido
+    if civitai and _already_downloaded(fp, fn, url):
+        print(f'  {GREEN}●{RESET} {fn} (ja existe, pulado)')
+        return
+
     headers = {'User-Agent': (CIVITAI.headers()['User-Agent'] if civitai else 'Mozilla/5.0')}
 
     if TOKET and civitai and f'{civitai}/api/download/models/' in url:
@@ -699,6 +727,17 @@ def clone(i):
 
         cmd_list = shlex.split(cmd)
         url = next((repo for repo in cmd_list if re.match(r'https?://', repo)), None)
+        dest = cmd_list[-1] if len(cmd_list) > 2 and not cmd_list[-1].startswith('http') else None
+        if dest:
+            dest_path = Path(dest).expanduser()
+        elif url:
+            dest_path = Path.cwd() / Path(url).name.removesuffix('.git')
+        else:
+            dest_path = None
+
+        if dest_path and dest_path.is_dir() and (dest_path / '.git').exists():
+            print(f'  {GREEN}●{RESET} {dest_path.name} (ja existe, pulado)')
+            continue
 
         p = subprocess.Popen(cmd_list, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
 
