@@ -399,12 +399,7 @@ def netorare(line):
         else:
             fn = (None if (civitai or driveGoogle) else Path(urlparse(url).path).name)
             fp = cwd
-
-        # pula o download inteiro se o arquivo de destino ja existir --
-        # evita re-baixar / sobrescrever extensoes, upscalers e modelos
-        # ja persistidos (ex: no Google Drive) de uma sessao anterior.
-        # Civitai fica de fora aqui porque o nome final so e conhecido
-        # depois do _res() resolver a API (checado de novo dentro de ariari())
+            
         if not (civitai or driveGoogle) and _already_downloaded(fp, fn, url):
             print(f'  {GREEN}●{RESET} {fn or Path(urlparse(url).path).name} (ja existe, pulado)')
             return
@@ -474,9 +469,6 @@ def ariari(url, fp, fn):
 
     civitai, huggingface, *_ = _url(url)
 
-    # segunda checagem: pra civitai o nome final so e conhecido depois do
-    # _res() acima resolver a API, entao o check antecipado do netorare()
-    # nao pega esse caso -- confere de novo aqui, com o fn ja resolvido
     if civitai and _already_downloaded(fp, fn, url):
         print(f'  {GREEN}●{RESET} {fn} (ja existe, pulado)')
         return
