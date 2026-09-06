@@ -125,7 +125,6 @@ def _tunnels():
         SyS(f'tar -xzf {name} -C {USR}')
         SyS(f'rm -f {name}')
 
-
         if b['bin'].exists(): b['bin'].chmod(0o755)
 
 def _symlinks(M):
@@ -217,6 +216,7 @@ def _setup():
     if WEBUI.exists() and (WEBUI / '.git').exists():
         CD(WEBUI)
         SyS(f"git pull origin {UID[ui]['branch']}")
+
         _tunnels()
 
     else:
@@ -284,7 +284,7 @@ def _scripts():
 
     for scripts in [nenen, melon, uid, MRK]: get_ipython().run_line_magic('run', str(scripts))
 
-G = 'https://raw.githubusercontent.com/gutris1/segsmaker/main'
+G = 'https://raw.githubusercontent.com/neschaos/segsmaker/main'
 
 USR = Path('/usr/bin')
 STR = Path('/root/.ipython/profile_default/startup')
